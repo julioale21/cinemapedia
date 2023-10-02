@@ -9,5 +9,6 @@ class ActorMapper {
     profilePath: cast.profilePath != null
       ? 'https://image.tmdb.org/t/p/w500${cast.profilePath}'
       : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9olGOBDV4VJajOwhdThRy6h7H53VYWaftG6hLrAsYD78quONGlUNtFnSlVBZ13sb2IfI&usqp=CAU', 
-    character: cast.creditId);
+    character: cast.character
+  );
 }

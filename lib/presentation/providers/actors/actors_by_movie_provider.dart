@@ -16,7 +16,7 @@ class ActorsByMovieNotifier extends StateNotifier<Map<String, List<Actor>>> {
 
   ActorsByMovieNotifier({required this.getActors}) : super({});
 
-  Future<void> loadMovie(String movieId) async {
+  Future<void> loadActors(String movieId) async {
     if (state[movieId] != null) return;
 
     final actors = await getActors(movieId);

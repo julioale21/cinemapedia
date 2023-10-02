@@ -75,7 +75,7 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
           itemBuilder: (context, index) {
             return _MovieItem(
               movie: movies[index],
-              onMovieSelected: () {
+              onMovieSelected: (context, movie) {
                 clearStreams();
                 close(context, movies[index]);
               },

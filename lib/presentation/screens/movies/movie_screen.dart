@@ -9,7 +9,10 @@ class MovieScreen extends ConsumerStatefulWidget {
   static const name = 'movie_screen';
   final String movieId;
 
-  const MovieScreen({super.key, required this.movieId});
+  const MovieScreen({
+    super.key,
+    required this.movieId,
+  });
 
   @override
   MovieScreenState createState() => MovieScreenState();
@@ -30,9 +33,10 @@ class MovieScreenState extends ConsumerState<MovieScreen> {
 
     if (movie == null) {
       return const Scaffold(
-          body: Center(
-        child: CircularProgressIndicator(),
-      ));
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
     }
 
     return Scaffold(
@@ -79,11 +83,12 @@ class _MovieDetails extends StatelessWidget {
                 SizedBox(
                   width: (size.width - 40) * 0.7,
                   child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(movie.title, style: textStyle.titleLarge),
-                        Text(movie.overview),
-                      ]),
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(movie.title, style: textStyle.titleLarge),
+                      Text(movie.overview),
+                    ],
+                  ),
                 )
               ],
             )),
@@ -93,14 +98,17 @@ class _MovieDetails extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           child: Wrap(
             children: [
-              ...movie.genreIds.map((gender) => Container(
-                    margin: const EdgeInsets.only(right: 10),
-                    child: Chip(
-                      label: Text(gender),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
+              ...movie.genreIds.map(
+                (gender) => Container(
+                  margin: const EdgeInsets.only(right: 10),
+                  child: Chip(
+                    label: Text(gender),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                  ))
+                  ),
+                ),
+              )
             ],
           ),
         ),
@@ -127,47 +135,61 @@ class _CustomSliverAppBar extends StatelessWidget {
       expandedHeight: size.height * 0.7,
       foregroundColor: Colors.white,
       shadowColor: Colors.red,
+      actions: [
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.favorite_border),
+          // icon: const Icon(
+          //   Icons.favorite_rounded,
+          //   color: Colors.red,
+          // ),
+        )
+      ],
       flexibleSpace: FlexibleSpaceBar(
-        titlePadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        // title: Text(
-        //   movie.title,
-        //   style: const TextStyle(fontSize: 20),
-        //   textAlign: TextAlign.start,
-        // ),
-        background: Stack(children: [
-          SizedBox.expand(
-            child: Image.network(
-              movie.posterPath,
-              fit: BoxFit.cover,
-              loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress != null) return const SizedBox();
+        titlePadding: const EdgeInsets.symmetric(
+          horizontal: 10,
+          vertical: 5,
+        ),
+        background: Stack(
+          children: [
+            SizedBox.expand(
+              child: Image.network(
+                movie.posterPath,
+                fit: BoxFit.cover,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress != null) return const SizedBox();
 
-                return FadeIn(child: child);
-              },
+                  return FadeIn(child: child);
+                },
+              ),
             ),
-          ),
-          const SizedBox.expand(
-            child: DecoratedBox(
-                decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                stops: [0.7, 1.0],
-                colors: [Colors.transparent, Colors.black87],
-              ),
-            )),
-          ),
-          const SizedBox.expand(
-            child: DecoratedBox(
-                decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                stops: [0.0, 0.3],
-                colors: [Colors.black87, Colors.transparent],
-              ),
-            )),
-          ),
-        ]),
+            const _CustomGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [
+                Colors.transparent,
+              ],
+              stops: [0.0, 0.3],
+            ),
+            const _CustomGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.transparent,
+                Colors.black87,
+              ],
+              stops: [0.8, 1.0],
+            ),
+            const _CustomGradient(
+              begin: Alignment.topLeft,
+              colors: [
+                Colors.black54,
+                Colors.transparent,
+              ],
+              stops: [0.0, 0.3],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -198,8 +220,9 @@ class _ActorsByMovie extends ConsumerWidget {
           return Container(
             padding: const EdgeInsets.all(8.0),
             width: 135,
-            child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
                 FadeInRight(
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
@@ -220,10 +243,41 @@ class _ActorsByMovie extends ConsumerWidget {
                   style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       overflow: TextOverflow.ellipsis),
-                )
-              ]),
+                ),
+              ],
+            ),
           );
         },
+      ),
+    );
+  }
+}
+
+class _CustomGradient extends StatelessWidget {
+  final AlignmentGeometry begin;
+  final AlignmentGeometry end;
+  final List<Color> colors;
+  final List<double> stops;
+
+  const _CustomGradient({
+    this.begin = Alignment.centerLeft,
+    this.end = Alignment.centerRight,
+    required this.colors,
+    required this.stops,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox.expand(
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: begin,
+            end: end,
+            stops: stops,
+            colors: colors,
+          ),
+        ),
       ),
     );
   }
